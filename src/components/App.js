@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './App.css';
-import RenderCells from './renderCells/renderCells';
+//import RenderCells from './renderCells/renderCells';
 import ArrowsBtn from './ArrowsBtn/Arrows';
 import LevelSelect from './LevelSelect/LevelSelect';
 import ModalBtn from "./ModalsBtn/ModalsBtn";
@@ -13,10 +13,8 @@ import ModalBtn from "./ModalsBtn/ModalsBtn";
 
 
 
+
 function App() {
-
-
-
 
 
     return (
@@ -54,7 +52,10 @@ function App() {
             <ModalBtn />
 
         </main>
+
     );
 }
+
+
 
 export default App;
