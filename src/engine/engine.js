@@ -8,7 +8,11 @@ function Engine(param) {
         let lifeTime = -1
 
         //random select from array of figures
-        param = allFigures[Math.floor(Math.random() * Math.floor(allFigures.length))][0]
+        param = {}
+        let figureID = [Math.floor(Math.random() * Math.floor(allFigures.length))]
+        param.figure = allFigures[figureID][0] //first figure
+        param.figureID = figureID
+
 
         //change position in real time, without life time
         let dragFigures = [];

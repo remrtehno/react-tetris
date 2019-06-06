@@ -2,7 +2,7 @@ let reserved = {}
 
 let positionReserve = [];
 
-//let positionY = [];
+let fastStack = {};
 
 
-export {reserved,positionReserve};
+export {reserved, positionReserve, fastStack,};
