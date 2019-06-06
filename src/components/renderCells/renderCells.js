@@ -25,6 +25,9 @@ class RenderCells extends React.Component {
                 }
             }
         }
+
+        // Force a render with a simulated state change
+        this.setState({ state: this.state });
     }
 
 
@@ -68,6 +71,7 @@ class RenderCells extends React.Component {
                 return (v + (this.props.lifeTime * 10))
             })
 
+
             for (let i = 0; i < this.props.limit; i++) {
                 if(positionReverseArr) {
                     if(positionReverseArr.includes(i)) {
@@ -95,28 +99,13 @@ class RenderCells extends React.Component {
                 }
 
 
-                let positionReverseArr = positionReserve.map(v => {
-                    return (v + (this.props.lifeTime * 10))
-                })
-                for (let i = 0; i < this.props.limit; i++) {
-                    if(positionReverseArr) {
-                        if(positionReverseArr.includes(i)) {
-                            cells.push(<div className="cell black" key={i}></div>)
-                        } else {
-                            cells.push(<div className="cell" key={i}></div>)
-                        }
-                    }
-                }
-                // Force a render with a simulated state change
-                this.setState({ state: this.state });
-                console.log(positionReverseArr)
+                //transfer to render
+                this.fallingMechanism()
             }
 
         }
 
         window.rt = () => {
-            //change figure mechanism
-
 
             // increment to rotate position
             if(fastStack.hasOwnProperty('rotateNumber')) {
@@ -131,27 +120,51 @@ class RenderCells extends React.Component {
                 fastStack.rotateNumber = rotateFigure
             }
 
+            //prevent to get out through border
+            if(fastStack.coordinateX) {
+                let currLengthFigure = figureArray[fastStack.rotateNumber]
+                currLengthFigure = currLengthFigure.map(v=>  parseInt(v.toString().match(/\d$/g)[0]))
+                currLengthFigure = Math.max.apply(null, currLengthFigure)
 
-            //#######
-            //save position on X coordiante
+                /*
+                    clipp all after border right
+                    formula:
+
+                    fastStack.coordinateX - current position
+                    if(fastStack.coordinateX + currLengthFigure > 9) - checks if figure border out
+                    9 - (fastStack.coordinateX + currLengthFigure) - checks how much figure will border out
+                    fastStack.coordinateX = fastStack.coordinateX - superfluous  - and clip that value
+
+                */
+                if(fastStack.coordinateX + currLengthFigure > 9) {
+                    let superfluous = 9 - (fastStack.coordinateX + currLengthFigure)
+                    superfluous = Math.abs(superfluous)
+                    //clip
+                    fastStack.coordinateX = fastStack.coordinateX - superfluous
+
+                }
 
 
 
-            //transfer to render
+            }
+
+
+            //assign rotate
             Object.assign(positionReserve, figureArray[fastStack.rotateNumber])
 
+            //read position on X coordiante
+            if(fastStack.hasOwnProperty('coordinateX')) {
+                Object.assign(positionReserve, positionReserve.map(v => (v + fastStack.coordinateX)))
+            }
+
+            //transfer to render
             this.fallingMechanism()
-
-            // Force a render with a simulated state change
-            this.setState({ state: this.state });
-
-
 
         }
 
 
 
-
+        console.log(fastStack)
 
 
 
