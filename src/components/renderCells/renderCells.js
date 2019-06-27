@@ -1,6 +1,5 @@
 import React from 'react';
-import {reserved as reserve} from '../reserve/reserve'
-import {positionReserve,fastStack} from '../reserve/reserve'
+import {positionReserve,fastStack, capture} from '../reserve/reserve'
 import allFigures from "../figures/figures"
 
 
@@ -71,7 +70,6 @@ class RenderCells extends React.Component {
                 return (v + (this.props.lifeTime * 10))
             })
 
-
             for (let i = 0; i < this.props.limit; i++) {
                 if(positionReverseArr) {
                     if(positionReverseArr.includes(i)) {
@@ -80,6 +78,19 @@ class RenderCells extends React.Component {
                         cells.push(<div className="cell" key={i}></div>)
                     }
                 }
+            }
+
+
+            console.log(this.props.lifeTime)
+
+            //limit on bottom
+            if(positionReverseArr.some(v => v > 200)) {
+
+                //make captuire
+                Object.assign(capture, positionReverseArr)
+
+                debugger
+
             }
 
 
@@ -127,7 +138,7 @@ class RenderCells extends React.Component {
                 currLengthFigure = Math.max.apply(null, currLengthFigure)
 
                 /*
-                    clipp all after border right
+                    clip all after border right
                     formula:
 
                     fastStack.coordinateX - current position
@@ -164,9 +175,6 @@ class RenderCells extends React.Component {
 
 
 
-        console.log(fastStack)
-
-
 
 
         return(
@@ -182,37 +190,3 @@ class RenderCells extends React.Component {
 export default RenderCells;
 
 
-
-//for rerender
-// constructor(props){
-//     super();
-//
-//     window.rerender = rerender => {
-//
-//         //document.querySelector('#container-cells').innerHTML = "";
-//         this.forceUpdate();
-//     }
-//
-// }
-// componentDidMount() {
-//     // setInterval(() => {
-//     //     this.setState(() => {
-//     //         console.log('setting state');
-//     //         return { unseen: "does not display" }
-//     //     });
-//     // }, 1000);
-// }
-// if(this.props.position) {
-//
-//
-//     cells.map((v,i) => {
-//
-//         if(this.props.position.includes(i)) {
-//             console.log(i)
-//             return null
-//         } else {
-//             return v
-//         }
-//
-//     })
-// }

@@ -1,8 +1,8 @@
-let reserved = {}
+let capture = []
 
 let positionReserve = [];
 
 let fastStack = {};
 
 
-export {reserved, positionReserve, fastStack,};
+export {capture, positionReserve, fastStack,};

@@ -12,7 +12,6 @@ import Engine from "./engine/engine";
 
 ReactDOM.render(<App />, document.getElementById('root'))
 
-ReactDOM.render(<Engine />, document.getElementById('grid'))
 
 
 

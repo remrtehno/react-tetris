@@ -18,8 +18,9 @@ function Engine(param) {
         let dragFigures = [];
 
         //clock generator
-        setInterval(() => {
+        let clock = setInterval(() => {
             lifeTime++
+
 
             //send command for rendering
             ReactDOM.render(<RenderCells limit="200" position={param} fastPosition={dragFigures} lifeTime={lifeTime}/>, document.getElementById("grid"))
