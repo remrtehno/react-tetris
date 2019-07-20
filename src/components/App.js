@@ -13,24 +13,54 @@ function generateNextFigure() {
 
 class App extends React.Component {
 
-  state = { nextFigure: null }
+  state = { tick: 0, currentFigure: null, nextFigure: null }
 
   tick = () => {
     this.setState(() => {
-      return {nextFigure: generateNextFigure()};
+      if(this.state.tick === 0) {
+        return {
+          tick: this.state.tick + 1,
+          nextFigure: generateNextFigure(),
+          currentFigure:generateNextFigure()
+        };
+      }
+      return {
+        tick: this.state.tick + 1,
+      };
     });
+    if(this.state.currentFigure) {
+
+    }
   }
 
   componentDidMount () {
     setInterval(this.tick , 1000);
+
   }
 
   componentWillUnmount () {
     clearInterval(this.tick);
   }
 
+  fallFigure = (arr) => {
+    if(!arr) { arr = [] }
+
+    //arr.map(v => v[1]++);
+
+    if(this.state.tick === 3) {
+      this.setState(() => {
+        return {
+          tick: 0,
+        }
+      })
+    }
+
+  };
+
   render () {
-    let {nextFigure} = this.state;
+    let {nextFigure, currentFigure} = this.state;
+    this.fallFigure(currentFigure);
+
     return (
       <main>
         <div className="container">
@@ -44,7 +74,7 @@ class App extends React.Component {
               <Grid
                 height={20}
                 width={10}
-                figure={null}
+                figure={currentFigure}
                 className="grid"
               />
               <Grid
