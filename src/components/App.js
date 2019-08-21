@@ -8,7 +8,8 @@ import allFigures from "./figures/figures";
 
 function generateNextFigure() {
   const index = Math.floor(Math.random() * allFigures.length);
-  return allFigures[index];
+  let a = [];
+  return a.concat(allFigures[index]);
 }
 
 class App extends React.Component {
@@ -20,46 +21,51 @@ class App extends React.Component {
       if(this.state.tick === 0) {
         return {
           tick: this.state.tick + 1,
-          nextFigure: generateNextFigure(),
-          currentFigure:generateNextFigure()
+         // nextFigure: generateNextFigure(),
+          currentFigure: generateNextFigure()
         };
+      }
+      if(this.state.tick === 3) {
+        console.log('!!!!!!!!!!!!!!!!!!!!!!!')
+        return {
+          tick: this.state.tick = 0,
+          currentFigure: generateNextFigure()
+        };
+
       }
       return {
         tick: this.state.tick + 1,
       };
     });
-    if(this.state.currentFigure) {
-
-    }
   }
 
   componentDidMount () {
     setInterval(this.tick , 1000);
 
   }
-
   componentWillUnmount () {
     clearInterval(this.tick);
   }
 
   fallFigure = (arr) => {
     if(!arr) { arr = [] }
-
-    //arr.map(v => v[1]++);
-
-    if(this.state.tick === 3) {
-      this.setState(() => {
-        return {
-          tick: 0,
-        }
-      })
-    }
-
+    return arr.map(v => v[1]++);
   };
 
   render () {
+
+
     let {nextFigure, currentFigure} = this.state;
-    this.fallFigure(currentFigure);
+    //this.fallFigure(currentFigure);
+
+    try {
+      console.log(this.state.tick, nextFigure,currentFigure[0], allFigures[0][0])
+    }
+    
+   catch (e) {
+
+   }
+     
 
     return (
       <main>
@@ -95,3 +101,12 @@ class App extends React.Component {
 }
 
 export default App;
+
+
+// 1) slice
+// 2) contact
+// 3)map
+// 4) filter
+// 5)spread
+// 6)object.assign
+// 7) array from
