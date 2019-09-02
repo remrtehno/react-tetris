@@ -5,6 +5,7 @@ import LevelSelect from './LevelSelect/LevelSelect';
 import ModalBtn from "./ModalsBtn/ModalsBtn";
 import {Grid} from './Grid';
 import allFigures from "./figures/figures";
+import {setCapture, stack} from "./reserve/reserve";
 
 function generateNextFigure() {
   const index = Math.floor(Math.random() * allFigures.length);
@@ -13,59 +14,109 @@ function generateNextFigure() {
 
 class App extends React.Component {
 
-  state = { tick: 0, currentFigure: null, nextFigure: null }
+  state = { tick: null, currentFigure: null, nextFigure: null, externalSignal: null,}
 
   tick = () => {
     this.setState(() => {
-      if(this.state.tick === 0) {
+      if(this.state.tick === null) {
         return {
-          tick: this.state.tick + 1,
-          currentFigure: generateNextFigure()
+          tick: this.state.tick = 0,
+          currentFigure: generateNextFigure(),
+          externalSignal: null,
         };
-      }
-      if(this.state.tick === 20) {
+      };
+      if(this.state.tick === 18) {
         return {
-          tick: this.state.tick = 1,
-          currentFigure: generateNextFigure()
+          tick: this.state.tick = 0,
+          currentFigure: generateNextFigure(),
+          externalSignal: null,
         };
-      }
+      };
       return {
         tick: this.state.tick + 1,
+        externalSignal: null,
       };
     });
-  }
+  };
 
   componentDidMount () {
     setInterval(this.tick , 1000);
-
-  }
+  };
   componentWillUnmount () {
     clearInterval(this.tick);
-  }
+  };
 
-  fallFigure = (arr) => {
-    if(!arr) { arr = [] }
-    return arr.map(v => v[1]++);
+  stopAndResetFigure = (externalSignal = null) => {
+    setCapture(this.state.currentFigure)
+    this.setState(()=>{
+      return {
+        tick: 0,
+        currentFigure: generateNextFigure(),
+        externalSignal: externalSignal,
+      };
+    });
+
+  };
+
+  fallFigure = (arr, e = 40) => { //40 arrow down - default behavior
+
+    if(arr) {
+      let clone = arr => Array.from(arr,item => Array.isArray(item) ? clone(item) : item);
+      let out = clone(arr);
+      out.map(v => e === 39 ? v[0]++ : e === 37 ? v[0]-- : e === 40 ? v[1]++ : v);
+      //##### !!!!
+      if( !out.some(x=>x[0] >=10 || x[0] < 0) ) { // prevent left/right side out
+        if (!this.compareArrays(out, stack) && !out.some(x => x.some(x => x >= 20)) /* prevent out of area */) {
+          arr.map(v => e === 39 ? v[0]++ : e === 37 ? v[0]-- : e === 40 ? v[1]++ : v);
+        } else {
+          this.stopAndResetFigure()
+        }
+      }
+    }
+
+  };
+
+  compareArrays = (val,compVal) => {
+    if(val.length !== 0, compVal.length !== 0) {
+      for( const x of compVal.values() ) {
+        for( const v of val.values() ) {
+          if(JSON.stringify(x) === JSON.stringify(v) ) {
+            return true;
+            break;
+          }
+        }
+      }
+    }
+    return false;
   };
 
   render () {
-
-
     let {nextFigure, currentFigure} = this.state;
+    let figureOut = null;
 
-    this.fallFigure(currentFigure);
-
-    try {
-      console.log(allFigures, currentFigure)
+    if(this.state.tick !== 0 && !this.state.externalSignal) {
+      this.fallFigure(currentFigure);
     }
-    
-   catch (e) {
 
-   }
-     
+    const move = (e) => {
+      if(currentFigure) {
+        this.fallFigure(currentFigure, e, true);
+        this.setState(()=>{
+          return {
+            externalSignal: true,
+          }
+        })
+      }
+    };
+
+    if(currentFigure) {
+      figureOut = [...currentFigure, ...stack]
+    }
 
     return (
       <main>
+        {this.state.tick}
+
         <div className="container">
           <div className="row">
             <div className="col s6 offset-s3 main-screen">
@@ -77,7 +128,7 @@ class App extends React.Component {
               <Grid
                 height={20}
                 width={10}
-                figure={currentFigure}
+                figure={figureOut}
                 className="grid"
               />
               <Grid
@@ -86,7 +137,7 @@ class App extends React.Component {
                 figure={nextFigure}
                 className="preview-cells"
               />
-              <ArrowsBtn/>
+              <ArrowsBtn appUpdate={e => move(e)}/>
               <LevelSelect/>
             </div>
           </div>

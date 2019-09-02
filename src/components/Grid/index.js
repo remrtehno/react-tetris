@@ -8,7 +8,6 @@ export function Grid({className, width, height, figure}) {
       {Array(width * height).fill(null).map((_, index) => {
         const [x, y] = getCoordinatesFromArrayIndex(index, width);
 
-
         let coord = null;
         if (figure != null) {
           coord = figure.find((coord) => coord[0] === x && coord[1] === y);
