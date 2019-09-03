@@ -10,6 +10,7 @@ const setCapture = (arr) => {
   if(arr) {
     stack = [...stack,...arr]
   }
+  console.log(stack)
 }
 
 

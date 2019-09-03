@@ -25,13 +25,6 @@ class App extends React.Component {
           externalSignal: null,
         };
       };
-      if(this.state.tick === 18) {
-        return {
-          tick: this.state.tick = 0,
-          currentFigure: generateNextFigure(),
-          externalSignal: null,
-        };
-      };
       return {
         tick: this.state.tick + 1,
         externalSignal: null,
@@ -47,7 +40,7 @@ class App extends React.Component {
   };
 
   stopAndResetFigure = (externalSignal = null) => {
-    setCapture(this.state.currentFigure)
+    setCapture(this.state.currentFigure);
     this.setState(()=>{
       return {
         tick: 0,
@@ -55,17 +48,15 @@ class App extends React.Component {
         externalSignal: externalSignal,
       };
     });
-
   };
 
   fallFigure = (arr, e = 40) => { //40 arrow down - default behavior
-
     if(arr) {
       let clone = arr => Array.from(arr,item => Array.isArray(item) ? clone(item) : item);
       let out = clone(arr);
       out.map(v => e === 39 ? v[0]++ : e === 37 ? v[0]-- : e === 40 ? v[1]++ : v);
       //##### !!!!
-      if( !out.some(x=>x[0] >=10 || x[0] < 0) ) { // prevent left/right side out
+      if( !out.some(x=>x[0] >=10 || x[0] < 0) && !this.compareArrays(out, stack) || e === 40) { // prevent left/right side out
         if (!this.compareArrays(out, stack) && !out.some(x => x.some(x => x >= 20)) /* prevent out of area */) {
           arr.map(v => e === 39 ? v[0]++ : e === 37 ? v[0]-- : e === 40 ? v[1]++ : v);
         } else {
@@ -73,11 +64,10 @@ class App extends React.Component {
         }
       }
     }
-
   };
 
   compareArrays = (val,compVal) => {
-    if(val.length !== 0, compVal.length !== 0) {
+    if(val.length !== 0 && compVal.length !== 0) {
       for( const x of compVal.values() ) {
         for( const v of val.values() ) {
           if(JSON.stringify(x) === JSON.stringify(v) ) {
@@ -101,11 +91,7 @@ class App extends React.Component {
     const move = (e) => {
       if(currentFigure) {
         this.fallFigure(currentFigure, e, true);
-        this.setState(()=>{
-          return {
-            externalSignal: true,
-          }
-        })
+        this.setState(() => { return { externalSignal: true, } })
       }
     };
 
@@ -115,8 +101,6 @@ class App extends React.Component {
 
     return (
       <main>
-        {this.state.tick}
-
         <div className="container">
           <div className="row">
             <div className="col s6 offset-s3 main-screen">
