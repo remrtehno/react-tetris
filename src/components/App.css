@@ -178,9 +178,6 @@ body {
 }
 .arrows .rotate-btn {
   position: relative;
-  top: 37%;
-  left: 160%;
-  transform: translate(-50%);
 }
 .controls-btn,
 levels {

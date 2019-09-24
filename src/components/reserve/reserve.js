@@ -1,17 +1,9 @@
-let capture = [];
-
 let stack = [];
 
-let positionReserve = [];
-
-let fastStack = {};
-
-const setCapture = (arr) => {
+const SetCapture = (arr) => {
   if(arr) {
     stack = [...stack,...arr]
   }
-  console.log(stack)
-}
+};
 
-
-export {capture, positionReserve, fastStack, stack, setCapture};
+export {stack, SetCapture};
