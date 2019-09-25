@@ -16,6 +16,7 @@ export function fullRowDetect(array) {
     cache.push(array[index][1]);
     if(countOccur(cache, array[index][1])) {
       clone = deleteFromArray(clone, array[index][1]);
+      clone.map(v => v[1]++);
     }
   }
   return clone;

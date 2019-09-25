@@ -62,15 +62,20 @@ class App extends React.Component {
       out.map(v => {
         switch (e) {
           case "ArrowDown": v[1]++;
-          break;
+            break;
           case "ArrowRight": v[0]++;
-          break;
+            break;
           case "ArrowLeft": v[0]--;
+            break;
+          default: v[1]++;
+            break;
         }
       });
 
-      if( !out.some(x=>x[0] >=10 || x[0] < 0) && !this.identicalArrayInArray(out, stack) || e === 'ArrowDown') { // prevent left/right side out
-        if (!this.identicalArrayInArray(out, stack) && !out.some(x => x.some(x => x >= 20)) /* prevent out of area */) {
+      // prevent left/right side out
+      if( !out.some(x=>x[0] >=10 || x[0] < 0) && !this.identicalArrayInArray(out, stack) || e === 'ArrowDown') {
+        /* prevent out of area */
+        if (!this.identicalArrayInArray(out, stack) && !out.some(x => x.some(x => x >= 20)) ) {
           arr.map(v => {
             switch (e) {
               case "ArrowDown": v[1]++;
@@ -78,6 +83,9 @@ class App extends React.Component {
               case "ArrowRight": v[0]++;
                 break;
               case "ArrowLeft": v[0]--;
+                break;
+              default: v[1]++;
+                break;
             }
           });
         } else {
